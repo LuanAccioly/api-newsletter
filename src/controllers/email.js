@@ -5,10 +5,14 @@ function validateEmail(email) {
   return re.test(email);
 }
 
+export const countEmails = async (_, res) => {
+  const emails = await Emails.find();
+  res.status(200).json({ countEmails: emails[0]?.emails.length || 0 });
+};
+
 export const getEmails = async (_, res) => {
   const emails = await Emails.find();
   const responseBody = {
-    countEmails: emails[0].emails.length,
     data: emails,
   };
   res.status(200).json(responseBody);
