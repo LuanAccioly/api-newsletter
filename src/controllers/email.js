@@ -12,14 +12,6 @@ export const countEmails = async (req, res) => {
   res.status(200).json({ countEmails: emails[0]?.emails.length || 0, ip: ip });
 };
 
-export const getEmails = async (_, res) => {
-  const emails = await Emails.find();
-  const responseBody = {
-    data: emails,
-  };
-  res.status(200).json(responseBody);
-};
-
 export const setEmail = async (req, res) => {
   const { email } = req.body;
   const emails = await Emails.find();
@@ -54,11 +46,4 @@ export const deleteEmail = async (req, res) => {
   } else {
     return res.status(400).json({ message: "Email inválido!" });
   }
-};
-
-export const sendNews = async (req, res) => {
-  const news = req.body;
-  const ip = req.ip;
-
-  return res.status(200).json({ title: news.title, ip: ip });
 };
