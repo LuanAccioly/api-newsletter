@@ -14,7 +14,7 @@ export const countEmails = async (req, res) => {
 export const setEmail = async (req, res) => {
   const { email } = req.body;
   const emails = await Emails.find();
-  const currentEmails = emailsData[0]?.emails || [];
+  const currentEmails = emails[0]?.emails || [];
 
   if (currentEmails.length >= 30) {
     return res.status(400).json({ message: "Limite de emails atingido!" });
