@@ -8,15 +8,21 @@ function validateEmail(email) {
 
 export const countEmails = async (req, res) => {
   const emails = await Emails.find();
-  const ip = req.ip;
-  res.status(200).json({ countEmails: emails[0]?.emails.length || 0, ip: ip });
+  res.status(200).json({ countEmails: emails[0]?.emails.length || 0 });
 };
 
 export const setEmail = async (req, res) => {
   const { email } = req.body;
   const emails = await Emails.find();
-  if (emails[0]?.emails.includes(email))
+  const currentEmails = emailsData[0]?.emails || [];
+
+  if (currentEmails.length >= 30) {
+    return res.status(400).json({ message: "Limite de emails atingido!" });
+  }
+
+  if (emails[0]?.emails.includes(email)) {
     return res.status(400).json({ message: "Email já cadastrado!" });
+  }
 
   if (validateEmail(email)) {
     await Emails.findOneAndUpdate(
@@ -27,9 +33,9 @@ export const setEmail = async (req, res) => {
       { upsert: true }
     );
     return res.status(201).json({ message: "Email adicionado com sucesso!" });
-  } else {
-    return res.status(400).json({ message: "Email inválido!" });
   }
+
+  return res.status(400).json({ message: "Email inválido!" });
 };
 
 export const deleteEmail = async (req, res) => {
